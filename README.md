@@ -1,12 +1,12 @@
 ## Boot-Ubuntu-daily-live-ISO-GRUB2
 
-Shell script to update (sync) and boot Ubuntu-daily-live.ISO from GRUB2
+Shell script to update (sync) and boot Ubuntu daily live ISO from GRUB2
 
 Need sudo permissions only in the first run (install dependencies and add custom menu entry on grub).
 
 For more details see script comments
 
-**Reverting changes made by Boot-Ubuntu-daily-live-ISO-GRUB2.sh script:**
+**Reverting changes made by boot-live-iso-grub.sh script:**
 
 ```
 cd /etc/grub.d/
