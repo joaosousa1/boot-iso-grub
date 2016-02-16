@@ -8,9 +8,14 @@ For more details see script comments
 
 **Reverting changes made by Boot-Ubuntu-daily-live-ISO-GRUB2.sh script:**
 
->cd /etc/grub.d/
+´´´
+cd /etc/grub.d/
+´´´
 
->sudo rm -f 42_ubuntu-daily-live
+´´´
+sudo rm -f 42_ubuntu-daily-live
+´´´
 
->sudo update-grub
-
+´´´
+sudo update-grub
+´´´
