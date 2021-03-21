@@ -4,25 +4,27 @@
 #Version 0.1
 
 ### Find /home partition "number"
-N_PARTICAO=`df /home | tail -1 | cut -c9`
+#N_PARTICAO=`df /home | tail -1 | cut -c9`
+#add suport to syntax like /dev/nvme0n1p1
+N_PARTICAO=`df /home | tail -1 | cut -d" " -f1 | rev | cut -c1`
 
 ### Install curl and zsync (Add repo "universe")
 which curl || sudo apt-get install -y curl
 which zsync || (sudo apt-get update; sudo add-apt-repository universe; sudo apt-get update; sudo apt-get install -y zsync)
 
 ### Find last "daily-live" codename (future URL changes will break this :( send me your feedback if you know a better way to do this :P )
-codename=`curl -s http://cdimage.ubuntu.com/daily-live/current/MD5SUMS | head -1 | cut -d* -f2 | cut -d- -f1`
+codename=`curl -s http://cdimage.ubuntu.com/daily-live/current/SHA256SUMS | head -1 | cut -d* -f2 | cut -d- -f1`
 
 cd
 
 ### zsync download/update ISO file
-zsync http://cdimage.ubuntu.com/daily-live/current/$codename-desktop-i386.iso.zsync && echo "Image $codename-desktop-i386.iso is update"
+zsync http://cdimage.ubuntu.com/daily-live/current/$codename-desktop-arm64.iso.zsync && echo "Image $codename-desktop-arm64.iso is update"
 
 ### Remove simbolic link (only if exist)
-rm -f Ubuntu-desktop-i386.iso
+rm -f Ubuntu-desktop-arm64.iso
 
-### Simbolic link to Ubuntu-desktop-i386.iso
-ln -s $codename-desktop-i386.iso Ubuntu-desktop-i386.iso
+### Simbolic link to Ubuntu-desktop-arm64.iso
+ln -s $codename-desktop-arm64.iso Ubuntu-desktop-arm64.iso
 
 ### Separate home partition?
 RAIZ=`echo "/$USER"`
@@ -43,7 +45,8 @@ cat > 42_ubuntu-daily-live << EOF
 exec tail -n +3 \$0
 
 menuentry "Ubuntu $codename daily-live" {
-set isofile="$RAIZ/Ubuntu-desktop-i386.iso"
+set isofile="$RAIZ/Ubuntu-desktop-arm64.iso"
+rmmod tpm
 loopback loop (hd0,$N_PARTICAO)\$isofile
 linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=\$isofile noprompt quiet splash --
 initrd (loop)/casper/initrd.lz
