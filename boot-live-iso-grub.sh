@@ -13,7 +13,7 @@ which curl || sudo apt-get install -y curl
 which zsync || (sudo apt-get update; sudo add-apt-repository universe; sudo apt-get update; sudo apt-get install -y zsync)
 
 ### Find last "daily-live" codename (future URL changes will break this :( send me your feedback if you know a better way to do this :P )
-codename=`curl -s http://cdimage.ubuntu.com/daily-live/current/SHA256SUMS | head -1 | cut -d* -f2 | cut -d- -f1`
+codename=`curl -s https://cdimage.ubuntu.com/daily-live/current/SHA256SUMS | head -1 | cut -d* -f2 | cut -d- -f1`
 
 cd
 
