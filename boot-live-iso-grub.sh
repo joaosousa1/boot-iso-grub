@@ -18,7 +18,7 @@ codename=`curl -s http://cdimage.ubuntu.com/daily-live/current/SHA256SUMS | head
 cd
 
 ### zsync download/update ISO file
-zsync http://cdimage.ubuntu.com/daily-live/current/$codename-desktop-arm64.iso.zsync && echo "Image $codename-desktop-arm64.iso is update"
+zsync https://cdimage.ubuntu.com/daily-live/current/$codename-desktop-arm64.iso.zsync && echo "Image $codename-desktop-arm64.iso is update"
 
 ### Remove simbolic link (only if exist)
 rm -f Ubuntu-desktop-arm64.iso
