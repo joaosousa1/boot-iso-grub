@@ -18,13 +18,13 @@ codename=`curl -s https://cdimage.ubuntu.com/daily-live/current/SHA256SUMS | hea
 cd
 
 ### zsync download/update ISO file
-zsync https://cdimage.ubuntu.com/daily-live/current/$codename-desktop-arm64.iso.zsync && echo "Image $codename-desktop-arm64.iso is update"
+zsync https://cdimage.ubuntu.com/daily-live/current/$codename-desktop-amd64.iso.zsync && echo "Image $codename-desktop-amd64.iso is update"
 
 ### Remove simbolic link (only if exist)
-rm -f Ubuntu-desktop-arm64.iso
+rm -f Ubuntu-desktop-amd64.iso
 
 ### Simbolic link to Ubuntu-desktop-arm64.iso
-ln -s $codename-desktop-arm64.iso Ubuntu-desktop-arm64.iso
+ln -s $codename-desktop-amd64.iso Ubuntu-desktop-amd64.iso
 
 ### Separate home partition?
 RAIZ=`echo "/$USER"`
@@ -45,7 +45,7 @@ cat > 42_ubuntu-daily-live << EOF
 exec tail -n +3 \$0
 
 menuentry "Ubuntu $codename daily-live" {
-set isofile="$RAIZ/Ubuntu-desktop-arm64.iso"
+set isofile="$RAIZ/Ubuntu-desktop-amd64.iso"
 rmmod tpm
 loopback loop (hd0,$N_PARTICAO)\$isofile
 linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=\$isofile noprompt quiet splash --
