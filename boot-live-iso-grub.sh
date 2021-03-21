@@ -49,7 +49,7 @@ set isofile="$RAIZ/Ubuntu-desktop-amd64.iso"
 rmmod tpm
 loopback loop (hd0,$N_PARTICAO)\$isofile
 linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=\$isofile noprompt quiet splash --
-initrd (loop)/casper/initrd.lz
+initrd (loop)/casper/initrd
 }
 EOF
 
