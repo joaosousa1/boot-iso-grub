@@ -1,12 +1,12 @@
 #!/bin/bash
-#Script to update and boot Ubuntu daily-live ISO with GRUB2
-#Autor João Sousa tuxmind.blogspot.com
-#Version 0.1
+#	Script to update and boot Ubuntu daily-live ISO with GRUB2
+#	Autor João Sousa tuxmind.blogspot.com
+#	Version 0.2 testado no Ubuntu 22.04 LTS
+#	Update 2022-04-17
 
-### Find /home partition "number"
-#N_PARTICAO=`df /home | tail -1 | cut -c9`
-#add suport to syntax like /dev/nvme0n1p1
-N_PARTICAO=`df /home | tail -1 | cut -d" " -f1 | rev | cut -c1`
+### Find partition uuid where the iso file is
+DEVICE=`df -h . | tail -1 | cut -d" " -f1`
+ROOTUUID=`sudo blkid $DEVICE | awk -F 'UUID="' '{print $2}' | cut -d\" -f1`
 
 ### Install curl and zsync (Add repo "universe")
 which curl || sudo apt-get install -y curl
@@ -44,12 +44,18 @@ cat > 42_ubuntu-daily-live << EOF
 #!/bin/sh
 exec tail -n +3 \$0
 
-menuentry "Ubuntu $codename daily-live" {
+menuentry "Ubuntu $codename Daily Live" {
+insmod part_gpt
+insmod ext2
+if [ x$feature_platform_search_hint = xy ]; then
+  search --no-floppy --fs-uuid --set=root  $ROOTUUID
+else
+  search --no-floppy --fs-uuid --set=root $ROOTUUID
+fi
 set isofile="$RAIZ/Ubuntu-desktop-amd64.iso"
-rmmod tpm
-loopback loop (hd0,$N_PARTICAO)\$isofile
-linux (loop)/casper/vmlinuz boot=casper iso-scan/filename=\$isofile noprompt quiet splash --
-initrd (loop)/casper/initrd
+loopback loop \$isofile
+linux (loop)/casper/vmlinuz root=UUID=$ROOTUUID boot=casper iso-scan/filename=\$isofile noprompt quiet splash --
+initrd (loop)/casper/initrd.lz
 }
 EOF
 
