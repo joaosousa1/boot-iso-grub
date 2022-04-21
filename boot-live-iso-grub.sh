@@ -2,11 +2,7 @@
 #	Script to update and boot Ubuntu daily-live ISO with GRUB2
 #	Autor João Sousa tuxmind.blogspot.com
 #	Version 0.2 testado no Ubuntu 22.04 LTS
-#	Update 2022-04-17
-
-### Find partition uuid where the iso file is
-DEVICE=`df -h . | tail -1 | cut -d" " -f1`
-ROOTUUID=`sudo blkid $DEVICE | awk -F 'UUID="' '{print $2}' | cut -d\" -f1`
+#	Update 2022-04-21
 
 ### Install curl and zsync (Add repo "universe")
 which curl || sudo apt-get install -y curl
@@ -26,11 +22,6 @@ rm -f Ubuntu-desktop-amd64.iso
 ### Simbolic link to Ubuntu-desktop-arm64.iso
 ln -s $codename-desktop-amd64.iso Ubuntu-desktop-amd64.iso
 
-### Separate home partition?
-RAIZ=`echo "/$USER"`
-### Or... same partition?
-[ `df / | tail -1 | cut -d" " -f1` == `df /home | tail -1 | cut -d" " -f1` ] && RAIZ=`echo "/home/$USER"`
-
 ### Created "42_ubuntu-daily-live" (if doesn't exist)
 if [ -e /etc/grub.d/42_ubuntu-daily-live ];
 then
@@ -38,6 +29,15 @@ then
 echo "42_ubuntu-daily-live ok"
 
 else
+
+### Separate home partition?
+RAIZ=`echo "/$USER"`
+### Or... same partition?
+[ `df / | tail -1 | cut -d" " -f1` == `df /home | tail -1 | cut -d" " -f1` ] && RAIZ=`echo "/home/$USER"`
+
+### Find partition uuid where the iso file is
+DEVICE=`df -h . | tail -1 | cut -d" " -f1`
+ROOTUUID=`sudo blkid $DEVICE | awk -F 'UUID="' '{print $2}' | cut -d\" -f1`
 
 ### Add new boot option to Grub2
 cat > 42_ubuntu-daily-live << EOF
